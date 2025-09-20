@@ -1,0 +1,52 @@
+{
+  "name": "anthropic-mcp-server",
+  "version": "0.1.0",
+  "description": "A Model Context Protocol server that provides Anthropic API integration with web search capabilities",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "anthropic-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('dist/index.js', '755')\"",
+    "start": "node dist/index.js --port 3002",
+    "dev:stdio": "tsx src/index.ts",
+    "dev:http": "tsx src/index.ts --port 3002",
+    "prepare": "npm run build",
+    "watch": "tsc --watch",
+    "inspector": "npx @modelcontextprotocol/inspector dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/anthropic-mcp-server.git"
+  },
+  "keywords": [
+    "mcp",
+    "anthropic",
+    "claude",
+    "ai",
+    "web-search"
+  ],
+  "author": {
+    "name": "Your Name",
+    "url": "https://your-website.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/anthropic-mcp-server/issues"
+  },
+  "homepage": "https://github.com/your-username/anthropic-mcp-server#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.16.0",
+    "@anthropic-ai/sdk": "^0.30.1",
+    "dotenv": "^17.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}

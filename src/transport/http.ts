@@ -88,14 +88,14 @@ async function createNewSession(
         sessionIdGenerator: () => randomUUID(),
         onsessioninitialized: (sessionId) => {
             sessions.set(sessionId, { transport, server: serverInstance });
-            console.log('New Anthropic session created:', sessionId);
+            console.log('New session created:', sessionId);
         }
     });
 
     transport.onclose = () => {
         if (transport.sessionId) {
             sessions.delete(transport.sessionId);
-            console.log('Anthropic session closed:', transport.sessionId);
+            console.log('Session closed:', transport.sessionId);
         }
     };
 
@@ -142,13 +142,13 @@ function logServerStart(config: Config): void {
         ? `Port ${config.port}` 
         : `http://localhost:${config.port}`;
     
-    console.log(`Anthropic MCP Server listening on ${displayUrl}`);
+    console.log(`MCP Server listening on ${displayUrl}`);
 
     if (!config.isProduction) {
         console.log('Put this in your client config:');
         console.log(JSON.stringify({
             "mcpServers": {
-                "anthropic-mcp": {
+                "mcp-server": {
                     "url": `http://localhost:${config.port}/mcp`
                 }
             }

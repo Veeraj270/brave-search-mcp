@@ -1,9 +1,9 @@
 /**
- * Configuration interface for the Anthropic MCP Server
+ * Configuration interface for the MCP Server
  * @interface Config
  */
 export interface Config {
-    /** Anthropic API key for authentication */
+    /** API key for authentication */
     apiKey: string;
     /** Port number for HTTP server */
     port: number;
@@ -19,9 +19,9 @@ export interface Config {
  * @throws {Error} If required environment variables are missing
  */
 export function loadConfig(): Config {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.API_KEY;
     if (!apiKey) {
-        throw new Error('ANTHROPIC_API_KEY environment variable is required');
+        throw new Error('API_KEY environment variable is required');
     }
 
     const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';

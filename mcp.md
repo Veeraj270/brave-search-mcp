@@ -1,14 +1,14 @@
-# Anthropic MCP Server Documentation
+# MCP Server Documentation
 
 ## Overview
 
-This guide walks you through setting up and running a Model Context Protocol (MCP) server that provides Anthropic Claude integration with web search capabilities via Streamable HTTP transport. The server offers a single tool that allows you to send prompts to Claude and receive responses with web search capabilities.
+This guide walks you through setting up and running a Model Context Protocol (MCP) server that provides AI model integration with web search capabilities via Streamable HTTP transport. The server offers a single tool that allows you to send prompts to AI models and receive responses with web search capabilities.
 
 ## Prerequisites
 
 ### Required Software
 - **Node.js 18+** - Install from [nodejs.org](https://nodejs.org/)
-- **Anthropic API Key** - Obtain from [Anthropic Console](https://console.anthropic.com/)
+- **API Key** - Obtain from your API provider
 - **Basic terminal/command line knowledge**
 
 ### System Requirements
@@ -20,7 +20,7 @@ This guide walks you through setting up and running a Model Context Protocol (MC
 
 ### 1. Project Setup
 ```bash
-# Clone or download the anthropic-mcp server files
+# Clone or download the mcp-server files
 # Ensure you have these files:
 # - index.ts (main server file)
 # - package.json (dependencies)
@@ -29,22 +29,22 @@ This guide walks you through setting up and running a Model Context Protocol (MC
 
 ### 2. Install Dependencies
 ```bash
-# Navigate to the anthropic-mcp directory
-cd /path/to/anthropic-mcp
+# Navigate to the mcp-server directory
+cd /path/to/mcp-server
 
 # Install all required packages
 npm install
 ```
 
-**What this does:** Downloads the MCP SDK, Anthropic SDK, and other dependencies needed to run the server.
+**What this does:** Downloads the MCP SDK, AI SDK, and other dependencies needed to run the server.
 
 ### 3. API Key Configuration
 ```bash
 # Option 1: Environment variable (recommended for production)
-export ANTHROPIC_API_KEY="your-anthropic-api-key-here"
+export API_KEY="your-api-key-here"
 
 # Option 2: Create a .env file
-echo "ANTHROPIC_API_KEY=your-anthropic-api-key-here" > .env
+echo "API_KEY=your-api-key-here" > .env
 ```
 
 **Security Note:** Never commit API keys to version control. Use environment variables in production.
@@ -62,11 +62,11 @@ npm run dev:stdio
 
 **Expected Output:**
 ```
-Anthropic MCP Server listening on http://localhost:3002
+MCP Server listening on http://localhost:3002
 Put this in your client config:
 {
   "mcpServers": {
-    "anthropic-mcp": {
+    "mcp-server": {
       "url": "http://localhost:3002/mcp"
     }
   }
@@ -137,9 +137,9 @@ curl -X POST http://localhost:3002/mcp \
 ```
 
 **Expected Response:** List of one tool:
-- `anthropic_claude` - Send prompts to Claude with web search
+- `ai_model` - Send prompts to AI models with web search
 
-### 4. Use the Anthropic Tool
+### 4. Use the AI Model Tool
 ```bash
 curl -X POST http://localhost:3002/mcp \
   -H "Accept: application/json, text/event-stream" \
@@ -150,7 +150,7 @@ curl -X POST http://localhost:3002/mcp \
     "id": 3,
     "method": "tools/call",
     "params": {
-      "name": "anthropic_claude",
+      "name": "ai_model",
       "arguments": {
         "prompt": "What are the latest developments in AI?",
         "maxTokens": 4096

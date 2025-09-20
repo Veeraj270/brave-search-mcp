@@ -5,29 +5,29 @@ import {
     ListToolsRequestSchema,
     McpError,
 } from '@modelcontextprotocol/sdk/types.js';
-import { AnthropicClient } from './anthropic-client.js';
+import { Client } from './client.js';
 import {
-    anthropicToolDefinition,
-    handleAnthropicTool
-} from './anthropic-tool.js';
+    toolDefinition,
+    handleTool
+} from './tool.js';
 
 /**
- * Main server class for Anthropic MCP integration
- * @class AnthropicServer
+ * Main server class for MCP integration
+ * @class McpServer
  */
-export class AnthropicServer {
-    private client: AnthropicClient;
+export class McpServer {
+    private client: Client;
     private server: Server;
 
     /**
-     * Creates a new AnthropicServer instance
-     * @param {string} apiKey - Anthropic API key for authentication
+     * Creates a new McpServer instance
+     * @param {string} apiKey - API key for authentication
      */
     constructor(apiKey: string) {
-        this.client = new AnthropicClient(apiKey);
+        this.client = new Client(apiKey);
         this.server = new Server(
             {
-                name: 'anthropic-mcp',
+                name: 'mcp-server',
                 version: '0.1.0',
             },
             {
@@ -48,7 +48,7 @@ export class AnthropicServer {
     private setupHandlers(): void {
         // List available tools
         this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-            tools: [anthropicToolDefinition],
+            tools: [toolDefinition],
         }));
 
         // Handle tool calls
@@ -56,8 +56,8 @@ export class AnthropicServer {
             const { name, arguments: args } = request.params;
 
             switch (name) {
-                case 'anthropic_claude':
-                    return handleAnthropicTool(this.client, args);
+                case 'ai_model':
+                    return handleTool(this.client, args);
                 
                 default:
                     throw new McpError(
@@ -93,13 +93,13 @@ export class AnthropicServer {
 /**
  * Factory function for creating standalone server instances
  * Used by HTTP transport for session-based connections
- * @param {string} apiKey - Anthropic API key for authentication
+ * @param {string} apiKey - API key for authentication
  * @returns {Server} Configured MCP server instance
  */
 export function createStandaloneServer(apiKey: string): Server {
     const server = new Server(
         {
-            name: "anthropic-mcp-discovery",
+            name: "mcp-discovery",
             version: "0.1.0",
         },
         {
@@ -109,19 +109,19 @@ export function createStandaloneServer(apiKey: string): Server {
         },
     );
 
-    const client = new AnthropicClient(apiKey);
+    const client = new Client(apiKey);
 
     // Set up handlers
     server.setRequestHandler(ListToolsRequestSchema, async () => ({
-        tools: [anthropicToolDefinition],
+        tools: [toolDefinition],
     }));
 
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
 
         switch (name) {
-            case 'anthropic_claude':
-                return handleAnthropicTool(client, args);
+            case 'ai_model':
+                return handleTool(client, args);
             
             default:
                 throw new McpError(

@@ -10,5 +10,5 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 export async function runStdioTransport(server: Server): Promise<void> {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error('Anthropic MCP server running on stdio');
+    console.error('MCP server running on stdio');
 }

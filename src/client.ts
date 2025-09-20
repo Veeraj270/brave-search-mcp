@@ -31,11 +31,6 @@ export class Client {
             const response = await this.client.messages.create({
                 model: "claude-3-5-sonnet-20241022",
                 max_tokens: maxTokens,
-                tools: [{
-                    type: "web_search",
-                    name: "web_search",
-                    max_uses: 2
-                }],
                 messages: [{
                     role: "user",
                     content: prompt
@@ -45,8 +40,8 @@ export class Client {
             // Extract the text content from the response
             if (response.content && response.content.length > 0) {
                 const textContent = response.content
-                    .filter(item => item.type === 'text')
-                    .map(item => item.text)
+                    .filter((item: any) => item.type === 'text')
+                    .map((item: any) => item.text)
                     .join('\n');
                 
                 return textContent || 'No response generated';
@@ -54,7 +49,7 @@ export class Client {
 
             return 'No response generated';
         } catch (error) {
-            throw new Error(`Anthropic API error: ${error instanceof Error ? error.message : String(error)}`);
+            throw new Error(`API error: ${error instanceof Error ? error.message : String(error)}`);
         }
     }
 }

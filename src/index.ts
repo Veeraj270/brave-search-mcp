@@ -7,11 +7,11 @@ loadEnv();
 
 import { loadConfig } from './config.js';
 import { parseArgs } from './cli.js';
-import { AnthropicServer } from './server.js';
+import { McpServer } from './server.js';
 import { runStdioTransport, startHttpTransport } from './transport/index.js';
 
 /**
- * Main entry point for the Anthropic MCP Server
+ * Main entry point for the MCP Server
  * 
  * Transport selection logic:
  * 1. --stdio flag forces STDIO transport
@@ -32,11 +32,11 @@ async function main() {
             startHttpTransport({ ...config, port });
         } else {
             // STDIO transport for local development
-            const server = new AnthropicServer(config.apiKey);
+            const server = new McpServer(config.apiKey);
             await runStdioTransport(server.getServer());
         }
     } catch (error) {
-        console.error("Fatal error running Anthropic server:", error);
+        console.error("Fatal error running server:", error);
         process.exit(1);
     }
 }

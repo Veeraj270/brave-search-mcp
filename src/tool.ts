@@ -1,17 +1,17 @@
 import { Tool, CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { AnthropicClient } from './anthropic-client.js';
-import { AnthropicMessageArgs } from './anthropic-types.js';
+import { Client } from './client.js';
+import { MessageArgs } from './types.js';
 
 /**
- * Tool definition for Anthropic Claude with web search
+ * Tool definition for AI model with web search
  */
-export const anthropicToolDefinition: Tool = {
-    name: "anthropic_claude",
+export const toolDefinition: Tool = {
+    name: "ai_model",
     description:
-        "Sends a prompt to Claude (Anthropic's AI model) with web search capabilities. " +
-        "Claude can search the web for current information and provide comprehensive, " +
+        "Sends a prompt to an AI model with web search capabilities. " +
+        "The model can search the web for current information and provide comprehensive, " +
         "up-to-date responses. Use this for any question that might benefit from " +
-        "real-time information or when you need Claude's reasoning capabilities " +
+        "real-time information or when you need AI reasoning capabilities " +
         "combined with web search.",
     inputSchema: {
         type: "object",
@@ -33,11 +33,11 @@ export const anthropicToolDefinition: Tool = {
 };
 
 /**
- * Type guard for Anthropic message arguments
+ * Type guard for message arguments
  * @param {unknown} args - Arguments to validate
  * @returns {boolean} True if arguments are valid
  */
-function isAnthropicMessageArgs(args: unknown): args is AnthropicMessageArgs {
+function isMessageArgs(args: unknown): args is MessageArgs {
     return (
         typeof args === "object" &&
         args !== null &&
@@ -47,19 +47,19 @@ function isAnthropicMessageArgs(args: unknown): args is AnthropicMessageArgs {
 }
 
 /**
- * Handles Anthropic tool calls
- * @param {AnthropicClient} client - Anthropic API client instance
+ * Handles tool calls
+ * @param {Client} client - API client instance
  * @param {unknown} args - Tool call arguments
  * @returns {Promise<CallToolResult>} Tool call result
  */
-export async function handleAnthropicTool(client: AnthropicClient, args: unknown): Promise<CallToolResult> {
+export async function handleTool(client: Client, args: unknown): Promise<CallToolResult> {
     try {
         if (!args) {
             throw new Error("No arguments provided");
         }
 
-        if (!isAnthropicMessageArgs(args)) {
-            throw new Error("Invalid arguments for anthropic_claude");
+        if (!isMessageArgs(args)) {
+            throw new Error("Invalid arguments for ai_model");
         }
 
         const { prompt, maxTokens = 16384 } = args;
